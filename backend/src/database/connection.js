@@ -1,7 +1,19 @@
 const knex = require('knex')
 const configuration = require('../../knexfile')
+const dotenv = require('dotenv')
 
-const config = process.env.NODE_ENV === 'test' ?  configuration.test : configuration.development
+dotenv.config()
+
+console.log(process.env.NODE_ENV)
+let config
+
+if(process.env.NODE_ENV !== 'production'){
+  config = process.env.NODE_ENV === 'test' ?  configuration.test : configuration.development
+}else{
+  config = configuration.production
+}
+
+console.log(config)
 
 const connection = knex(config)
 

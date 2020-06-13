@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "tk.kennedyrs.bethehero",
+      "versionCode": 1
     }
   }
 }
