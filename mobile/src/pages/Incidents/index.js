@@ -19,7 +19,6 @@ export default function Incidents(){
 
   useEffect(() => {
     loadIncidents()
-
   }, [])
 
   async function loadIncidents() {
@@ -40,6 +39,8 @@ export default function Incidents(){
     setIncidents([...incidents, ...response.data])
     setTotal(response.headers['x-total-count'])
     setPage(page + 1)
+  
+    
     setLoading(false)
   }
 
@@ -52,17 +53,24 @@ export default function Incidents(){
       <View style={styles.header}>
         <Image source={logoImg} />
         <Text style={styles.headerText}>
-          Total de <Text style={styles.headerTextBold}>{total} Casos </Text>
+          Total de{" "}
+          <Text style={styles.headerTextBold}>
+            {incidents.length > 0 ? total || 0 : 0} Casos{" "}
+          </Text>
         </Text>
       </View>
 
       <Text style={styles.title}>Bem-vindo!</Text>
-      <Text style={styles.description}>Escolha um dos casos abaixo e salve</Text>
+      <Text style={styles.description}>
+        {incidents.length > 0
+          ? "Escolha um dos casos abaixo para ajudar"
+          : "Nenhum caso aberto..."}
+      </Text>
 
-      <FlatList 
+      <FlatList
         style={styles.incidentList}
         data={incidents}
-        keyExtractor={incident => String(incident.id)}
+        keyExtractor={(incident) => String(incident.id)}
         showsVerticalScrollIndicator={true}
         onEndReached={loadIncidents}
         onEndReachedThreshold={0.8}
@@ -76,9 +84,9 @@ export default function Incidents(){
 
             <Text style={styles.incidentProperty}>VALOR:</Text>
             <Text style={styles.incidentValue}>
-              {Intl.NumberFormat('pt-BR', { 
-                style: 'currency', 
-                currency: 'BRL' 
+              {Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL",
               }).format(incident.value)}
             </Text>
 
@@ -87,11 +95,11 @@ export default function Incidents(){
               onPress={() => navigateToDetail(incident)}
             >
               <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
-              <Feather name='arrow-right' size={16} color='#e02041' />
+              <Feather name="arrow-right" size={16} color="#e02041" />
             </TouchableOpacity>
           </View>
         )}
       />
     </View>
-  )
+  );
 }
