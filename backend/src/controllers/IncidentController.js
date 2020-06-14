@@ -7,19 +7,20 @@ module.exports = {
     const [count] = await connection('incidents').count()
 
     const incidents = await connection('incidents')
-      .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
-      .limit(5)
-      .offset((page -1) * 5)
-      .select([
-        'incidents.*', 
-        'ongs.name', 
-        'ongs.email', 
-        'ongs.whatsapp',
-        'ongs.city',
-        'ongs.uf'
-      ])
-
-    response.header('X-Total-Count', count['count(*)'])
+    .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+    .limit(5)
+    .offset((page -1) * 5)
+    .select([
+      'incidents.*', 
+      'ongs.name', 
+      'ongs.email', 
+      'ongs.whatsapp',
+      'ongs.city',
+      'ongs.uf'
+    ])
+    
+    // response.header('X-Total-Count', count['count(*)'])
+    response.header('X-Total-Count', count.count)
 
     return response.json(incidents)
   },
@@ -28,15 +29,14 @@ module.exports = {
     const { title, description, value } = request.body
     const ong_id = request.headers.authorization
 
-    const [id] = await connection('incidents').insert({
+    const id = await connection('incidents').insert({
       title,
       description,
       value,
       ong_id
-    })
-
+    }).returning('id')
     
-    return response.json({ id })
+    return response.json({ id: id[0] })
   },
 
   async delete(request, response) {
