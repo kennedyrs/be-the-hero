@@ -64,6 +64,7 @@ export default function NewIncident() {
           <textarea  
             value={description}
             placeholder="Descrição" 
+            maxLength={250}
             onChange={e => setDescription(e.target.value)}
           />
           <input  
